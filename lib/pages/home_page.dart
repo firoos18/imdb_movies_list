@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
 import 'package:imdb_movies/components/movie_tile.dart';
 import 'package:imdb_movies/models/items.dart';
-import 'package:imdb_movies/models/top250_movies.dart';
 import 'package:imdb_movies/pages/details_page.dart';
 import 'package:imdb_movies/services/http.dart';
 
@@ -54,13 +50,15 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => DetailsPage(
-                        image: itemList[index].image,
-                        title: itemList[index].title,
-                        fullTitle: itemList[index].fullTitle,
-                        year: itemList[index].year,
-                        crew: itemList[index].crew,
-                        imDbRating: itemList[index].imDbRating,
-                        rank: itemList[index].rank),
+                      image: itemList[index].image,
+                      title: itemList[index].title,
+                      fullTitle: itemList[index].fullTitle,
+                      year: itemList[index].year,
+                      crew: itemList[index].crew,
+                      imDbRating: itemList[index].imDbRating,
+                      rank: itemList[index].rank,
+                      id: itemList[index].id,
+                    ),
                   ),
                 ),
                 child: const Icon(Icons.chevron_right),
