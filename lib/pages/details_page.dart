@@ -31,12 +31,10 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  TitleSpecific? title;
   List<ActorSpecific> actorList = [];
   ApiService api = ApiService();
 
   getData() async {
-    title = await api.getTitleSpecific(widget.id);
     actorList = await api.getActorsSpecific(widget.id);
     setState(() {});
   }
@@ -61,7 +59,12 @@ class _DetailsPageState extends State<DetailsPage> {
           children: [
             Row(
               children: [
-                Image.network(widget.image),
+                SizedBox(
+                  height: 200,
+                  child: Image.network(
+                    widget.image,
+                  ),
+                ),
                 const SizedBox(
                   width: 16,
                 ),
@@ -79,12 +82,28 @@ class _DetailsPageState extends State<DetailsPage> {
             const SizedBox(
               height: 16,
             ),
-            Text(
-              title!.plot,
-              style: GoogleFonts.montserrat(
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
+            FutureBuilder(
+              future: api.getTitleSpecific(widget.id),
+              builder: (context, snapshot) {
+                TitleSpecific titleSpecific;
+                if (snapshot.hasData) {
+                  return Text(
+                    snapshot.data.plot,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  );
+                } else {
+                  return const Center(
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(
               height: 8,
@@ -95,32 +114,50 @@ class _DetailsPageState extends State<DetailsPage> {
                 fontSize: 20,
               ),
             ),
-            Text(
-              title!.awards,
-              style: GoogleFonts.montserrat(
-                fontSize: 14,
-              ),
+            FutureBuilder(
+              future: api.getTitleSpecific(widget.id),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    snapshot.data.awards,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  );
+                } else {
+                  return const Center(
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              },
             ),
             Expanded(
-                child: ListView.builder(
-                    itemCount: actorList.length,
-                    itemBuilder: ((context, index) {
-                      return ListTile(
-                        title: Text(
-                          actorList[index].name,
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        leading: Image.network(actorList[index].image),
-                        subtitle: Text(
-                          actorList[index].asCharacter,
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      );
-                    })))
+              child: ListView.builder(
+                itemCount: actorList.length,
+                itemBuilder: ((context, index) {
+                  return ListTile(
+                    title: Text(
+                      actorList[index].name,
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    leading: Image.network(actorList[index].image),
+                    subtitle: Text(
+                      actorList[index].asCharacter,
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
           ],
         ),
       )),

@@ -42,8 +42,6 @@ class ApiService {
         await http.get(Uri.parse('${url}FullCast/k_011jfn5i/$title'));
 
     if (response.statusCode == 200) {
-      print(json.decode(response.body)['actors']);
-
       Iterable actors = (jsonDecode(response.body)['actors']);
       List<ActorSpecific> actor =
           actors.map((e) => ActorSpecific.fromJson(e)).toList();
